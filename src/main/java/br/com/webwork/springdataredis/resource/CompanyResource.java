@@ -3,6 +3,7 @@ package br.com.webwork.springdataredis.resource;
 import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 import static org.springframework.http.HttpStatus.OK;
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,9 +22,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.com.webwork.springdataredis.domain.Company;
 import br.com.webwork.springdataredis.repository.CompanyRepository;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 
 @RestController
 @RequestMapping("/companies")
+@Api(value = "/companies", produces = APPLICATION_JSON_VALUE, tags = {"Companies"}, description = "Operations to companies.")
 public class CompanyResource {
 	
 	@Autowired
@@ -31,12 +37,25 @@ public class CompanyResource {
 	
 	@PostMapping
 	@ResponseStatus(CREATED)
+	@ApiOperation(value = "Save a company", notes = "Method to save a company")
+    @ApiResponses({
+    		@ApiResponse(code = 200, message = "OK"),
+            @ApiResponse(code = 401, message = "Unauthorized"),
+            @ApiResponse(code = 403, message = "Forbidden"),
+            @ApiResponse(code = 500, message = "Internal Server Error")})
 	public @ResponseBody ResponseEntity<Company> save(@RequestBody Company company){
 		return new ResponseEntity<>(this.repository.save(company), CREATED);
 	}
 	
 	@GetMapping
+	@ResponseStatus(OK)
 	@RequestMapping("/{id}")
+	@ApiOperation(value = "Find a company by id", notes = "Find a company by id company")
+    @ApiResponses({
+    		@ApiResponse(code = 200, message = "OK"),
+            @ApiResponse(code = 401, message = "Unauthorized"),
+            @ApiResponse(code = 403, message = "Forbidden"),
+            @ApiResponse(code = 500, message = "Internal Server Error")})
 	public ResponseEntity<Company> findById(@PathVariable Long id) {
 		
 		Optional<Company> company = this.repository.findById(id);
@@ -48,6 +67,13 @@ public class CompanyResource {
 	}
 	
 	@GetMapping
+	@ResponseStatus(OK)
+	@ApiOperation(value = "Find a company by id", notes = "Find a company by id company")
+    @ApiResponses({
+    		@ApiResponse(code = 200, message = "OK"),
+            @ApiResponse(code = 401, message = "Unauthorized"),
+            @ApiResponse(code = 403, message = "Forbidden"),
+            @ApiResponse(code = 500, message = "Internal Server Error")})
 	public ResponseEntity<List<Company>> list(){
 		
 		Iterable<Company> companies = this.repository.findAll();
