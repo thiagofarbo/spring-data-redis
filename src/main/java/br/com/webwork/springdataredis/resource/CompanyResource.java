@@ -1,13 +1,10 @@
 package br.com.webwork.springdataredis.resource;
 
 import static org.springframework.http.HttpStatus.CREATED;
-import static org.springframework.http.HttpStatus.NOT_FOUND;
 import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -21,7 +18,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.webwork.springdataredis.domain.Company;
-import br.com.webwork.springdataredis.repository.CompanyRepository;
+import br.com.webwork.springdataredis.service.CompanyService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -33,7 +30,7 @@ import io.swagger.annotations.ApiResponses;
 public class CompanyResource {
 	
 	@Autowired
-	private CompanyRepository repository;
+	private CompanyService service;
 	
 	@PostMapping
 	@ResponseStatus(CREATED)
@@ -44,7 +41,7 @@ public class CompanyResource {
             @ApiResponse(code = 403, message = "Forbidden"),
             @ApiResponse(code = 500, message = "Internal Server Error")})
 	public @ResponseBody ResponseEntity<Company> save(@RequestBody Company company){
-		return new ResponseEntity<>(this.repository.save(company), CREATED);
+		return this.service.saveCompany(company);
 	}
 	
 	@GetMapping
@@ -57,13 +54,7 @@ public class CompanyResource {
             @ApiResponse(code = 403, message = "Forbidden"),
             @ApiResponse(code = 500, message = "Internal Server Error")})
 	public ResponseEntity<Company> findById(@PathVariable Long id) {
-		
-		Optional<Company> company = this.repository.findById(id);
-		
-		if(company.isPresent()) {
-			return new ResponseEntity<>(company.get(), OK);
-		}
-		return new ResponseEntity<>(NOT_FOUND);
+		return this.service.findByIdCompany(id);
 	}
 	
 	@GetMapping
@@ -75,18 +66,6 @@ public class CompanyResource {
             @ApiResponse(code = 403, message = "Forbidden"),
             @ApiResponse(code = 500, message = "Internal Server Error")})
 	public ResponseEntity<List<Company>> list(){
-		
-		Iterable<Company> companies = this.repository.findAll();
-		
-		List<Company> companyList = new ArrayList<>();
-		
-		if(companies.iterator().hasNext()) {
-			companies.forEach(c -> {
-				
-				companyList.add(c);
-
-			});
-		}
-		return new ResponseEntity<>(companyList, OK);
+		return this.service.findAllCompanies();
 	}
 }
