@@ -1,4 +1,4 @@
-#About this application 
+# About this application 
 On this application was used Spring Boot framework and Java 8. The application does not need any server to do deploy because this application is deployed in an embedded tomcat server.
 
 # How to run the application
