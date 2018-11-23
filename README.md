@@ -1,8 +1,5 @@
 #About this application 
-On this application was used Spring Boot framework and Java 8. The application does not need any server to do deploy. 
-
-**Why?**
-This application is deployed in an embedded Tomcat.
+On this application was used Spring Boot framework and Java 8. The application does not need any server to do deploy because this application is deployed in an embedded tomcat server.
 
 # How to run the application
 For default the SpringBoot run on port 8080, make sure you do not have any server running on this one.
